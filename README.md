@@ -1,4 +1,4 @@
-# My nvim configuration
+# My Neovim configuration
 
 - Clone configuration
 ```ssh
