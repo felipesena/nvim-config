@@ -1,4 +1,11 @@
-# 💤 LazyVim
+# My nvim configuration
 
-A starter template for [LazyVim](https://github.com/LazyVim/LazyVim).
-Refer to the [documentation](https://lazyvim.github.io/installation) to get started.
+- Clone configuration
+```ssh
+git clone https://github.com/felipesena/nvim-config ~/.config/nvim
+```
+
+- Start Neovim!
+```ssh
+nvim
+```
