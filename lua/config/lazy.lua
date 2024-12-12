@@ -9,6 +9,7 @@ end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 vim.g.mapleader = " "
+vim.g.have_nerd_font = true
 
 require("lazy").setup({ import = "config.plugins" }, {
   change_detection = {
