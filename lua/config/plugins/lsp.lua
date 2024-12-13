@@ -62,7 +62,7 @@ return {
             })
           end
 
-          ---@diagnostic disable-next-line: param-type-mismatch
+          ---@diagnostic disable-next-line: param-type-mismatch, missing-parameter
           if client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
             vim.keymap.set("n", "<leader>th",
               function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hist.is_enabled { bufnr = args.buf }) end)
@@ -75,6 +75,7 @@ return {
 
       local servers = {
         pyright = {},
+        gopls = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -84,6 +85,27 @@ return {
             }
           }
         }
+      }
+
+      require('mason').setup()
+
+      local ensure_installed = vim.tbl_keys(servers or {})
+      vim.list_extend(ensure_installed, {
+        'stylua',
+      })
+
+      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      require('mason-lspconfig').setup {
+        handlers = {
+          function(server_name)
+            local server = servers[server_name] or {}
+            -- This handles overriding only values explicitly passed
+            -- by the server configuration above. Useful when disabling
+            -- certain features of an LSP (for example, turning off formatting for ts_ls)
+            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            require('lspconfig')[server_name].setup(server)
+          end,
+        },
       }
     end,
   }
