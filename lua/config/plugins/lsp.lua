@@ -50,7 +50,6 @@ return {
       "williamboman/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
       { "j-hui/fidget.nvim", opts = {} },
-      "hrsh7th/cmp-nvim-lsp",
       "saghen/blink.cmp",
     },
     config = function()
@@ -96,8 +95,8 @@ return {
         end,
       })
 
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
+      require("lspconfig").lua_ls.setup({ capabilities = capabilities })
 
       local servers = {
         kotlin_language_server = {},
@@ -120,8 +119,6 @@ return {
       }
 
       require("mason").setup()
-      local blink_capabilities = require("blink.cmp").get_lsp_capabilities()
-      require("lspconfig").lua_ls.setup({ capabilities = blink_capabilities })
 
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, formatters)
