@@ -21,11 +21,4 @@ return {
       statusline.setup({ use_icons = true })
     end,
   },
-
-  {
-    "m4xshen/autoclose.nvim",
-    config = function()
-      require("autoclose").setup()
-    end,
-  },
 }
