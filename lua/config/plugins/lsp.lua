@@ -16,9 +16,6 @@ return {
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
@@ -34,9 +31,6 @@ return {
       formatters_by_ft = {
         lua = { "stylua" },
         kotlin = { "ktlint" },
-
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
       },
     },
   },
@@ -55,10 +49,9 @@ return {
       { "williamboman/mason.nvim", config = true },
       "williamboman/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
-      -- Useful status updates for LSP.
       { "j-hui/fidget.nvim", opts = {} },
-      -- Allows extra capabilities provided by nvim-cmp
       "hrsh7th/cmp-nvim-lsp",
+      "saghen/blink.cmp",
     },
     config = function()
       require("lspconfig").lua_ls.setup({})
@@ -127,6 +120,8 @@ return {
       }
 
       require("mason").setup()
+      local blink_capabilities = require("blink.cmp").get_lsp_capabilities()
+      require("lspconfig").lua_ls.setup({ capabilities = blink_capabilities })
 
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, formatters)
@@ -136,9 +131,6 @@ return {
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
             server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
             require("lspconfig")[server_name].setup(server)
           end,
