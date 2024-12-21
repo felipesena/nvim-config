@@ -1,5 +1,11 @@
 return {
   {
+    "m4xshen/autoclose.nvim",
+    config = function()
+      require("autoclose").setup()
+    end,
+  },
+  {
     "saghen/blink.cmp",
     dependencies = "rafamadriz/friendly-snippets",
     version = "v0.*",
